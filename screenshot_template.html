@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body, html {
+            margin: 0; padding: 0;
+            width: 1280px; height: 800px;
+            overflow: hidden;
+            background: radial-gradient(circle at 20% 20%, #1e1b4b 0%, #0f172a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', sans-serif;
+        }
+        .browser-mock {
+            width: 1000px;
+            height: 650px;
+            background: #111827;
+            border-radius: 12px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        .browser-header {
+            height: 40px;
+            background: #1f2937;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            gap: 8px;
+        }
+        .dot { width: 10px; height: 10px; border-radius: 50%; }
+        .red { background: #ff5f56; }
+        .yellow { background: #ffbd2e; }
+        .green { background: #27c93f; }
+        
+        .address-bar {
+            flex: 1;
+            height: 24px;
+            background: #374151;
+            border-radius: 6px;
+            margin: 0 20px;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            color: #9ca3af;
+            font-size: 12px;
+        }
+
+        .extension-icon {
+            width: 24px; height: 24px;
+            background: rgba(99,102,241,0.2);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .popup-container {
+            position: absolute;
+            top: 45px;
+            right: 20px;
+            width: 320px;
+            height: 480px;
+            background: #0f172a;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+            overflow: hidden;
+            z-index: 100;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .caption {
+            position: absolute;
+            left: 60px;
+            top: 250px;
+            max-width: 450px;
+            color: white;
+        }
+        .caption h2 { font-size: 48px; margin: 0; line-height: 1.1; }
+        .caption p { font-size: 20px; color: #94a3b8; margin-top: 15px; }
+        .highlight { color: #818cf8; }
+    </style>
+</head>
+<body>
+    <div class="caption">
+        <h2 id="cap-title">Advanced <span class="highlight">Color Picker</span></h2>
+        <p id="cap-desc">Grab any color from the web with pixel-perfect precision.</p>
+    </div>
+
+    <div class="browser-mock">
+        <div class="browser-header">
+            <div class="dot red"></div>
+            <div class="dot yellow"></div>
+            <div class="dot green"></div>
+            <div class="address-bar">https://www.google.com/design/colors</div>
+            <div class="extension-icon">
+                <img src="icons/icon16.png" style="width:14px">
+            </div>
+        </div>
+        <div style="flex:1; background: url('https://user-images.githubusercontent.com/13175799/236688755-d8689943-3467-4a01-9252-a5e2f6942def.png'); background-size: cover; opacity: 0.2;"></div>
+        
+        <div class="popup-container">
+            <iframe id="ext-frame" src="popup.html"></iframe>
+        </div>
+    </div>
+
+    <script>
+        // Function to set content via URL params for the subagent
+        const params = new URLSearchParams(window.location.search);
+        const tab = params.get('tab') || 'picker';
+        const titles = {
+            'picker': 'Intuitive <span class="highlight">Selection</span>',
+            'panel': 'Pro <span class="highlight">Color Editor</span>',
+            'gradient': 'Beautiful <span class="highlight">Gradients</span>',
+            'history': 'Smart <span class="highlight">History</span>'
+        };
+        const descs = {
+            'picker': 'The quickest way to identify colors on any website.',
+            'panel': 'Full control over HSV, RGB, and HEX values.',
+            'gradient': 'Create and copy CSS gradients in seconds.',
+            'history': 'Never lose a color code again. All your picks saved.'
+        };
+        
+        document.getElementById('cap-title').innerHTML = titles[tab];
+        document.getElementById('cap-desc').textContent = descs[tab];
+        
+        const frame = document.getElementById('ext-frame');
+        frame.onload = () => {
+             // Tell the frame to switch tab after it loads
+             frame.contentWindow.document.querySelector(`[data-tab="${tab}"]`).click();
+        };
+    </script>
+</body>
+</html>

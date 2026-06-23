@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Color Picker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="app">
+
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <img src="icons/icon48.png" alt="Nova" class="logo">
+                <div class="header-title">
+                    <h1>Nova Color Picker</h1>
+                    <span class="version">v2.0</span>
+                </div>
+            </div>
+            <button id="clear-history" class="icon-btn" title="Clear All History">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                </svg>
+            </button>
+        </header>
+
+        <!-- Tabs -->
+        <nav class="tabs">
+            <button class="tab active" data-tab="picker">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="m2 22 1-1h3l9-9"/><path d="M3 21v-3l9-9"/><path d="m15 6 3.4-3.4a2.1 2.1 0 1 1 3 3L18 9l.4.4a2.1 2.1 0 1 1-3 3l-3.8-3.8"/></svg>
+                Picker
+            </button>
+            <button class="tab" data-tab="panel">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="6.5" cy="13.5" r="2.5"/><circle cx="17" cy="17" r="3"/></svg>
+                Panel
+            </button>
+            <button class="tab" data-tab="gradient">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18"/></svg>
+                Gradient
+            </button>
+            <button class="tab" data-tab="history">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/></svg>
+                History
+            </button>
+        </nav>
+
+        <!-- Tab: Picker -->
+        <section class="tab-content active" id="tab-picker">
+            <!-- Pick Button -->
+            <button id="pick-btn" class="pick-btn">
+                <div class="pick-btn-icon">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m2 22 1-1h3l9-9"/><path d="M3 21v-3l9-9"/><path d="m15 6 3.4-3.4a2.1 2.1 0 1 1 3 3L18 9l.4.4a2.1 2.1 0 1 1-3 3l-3.8-3.8"/>
+                    </svg>
+                </div>
+                <span>Pick Color From Screen</span>
+            </button>
+
+            <!-- Color Preview Card -->
+            <div id="color-card" class="color-card hidden">
+                <div class="color-display">
+                    <div class="color-preview" id="main-preview"></div>
+                    <div class="color-info">
+                        <div class="color-name" id="color-name">—</div>
+                        <div class="color-luminance" id="color-luminance">Luminance: —</div>
+                    </div>
+                </div>
+
+                <div class="formats">
+                    <div class="format-row">
+                        <span class="fmt-label">HEX</span>
+                        <code id="hex-value" class="fmt-value">#000000</code>
+                        <button class="copy-btn" data-target="hex-value">
+                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        </button>
+                    </div>
+                    <div class="format-row">
+                        <span class="fmt-label">RGB</span>
+                        <code id="rgb-value" class="fmt-value">rgb(0,0,0)</code>
+                        <button class="copy-btn" data-target="rgb-value">
+                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        </button>
+                    </div>
+                    <div class="format-row">
+                        <span class="fmt-label">HSL</span>
+                        <code id="hsl-value" class="fmt-value">hsl(0,0%,0%)</code>
+                        <button class="copy-btn" data-target="hsl-value">
+                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        </button>
+                    </div>
+                    <div class="format-row">
+                        <span class="fmt-label">HSB</span>
+                        <code id="hsb-value" class="fmt-value">hsb(0,0%,0%)</code>
+                        <button class="copy-btn" data-target="hsb-value">
+                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div id="picker-empty" class="empty-state">
+                <div class="empty-icon">🎨</div>
+                <p>Click the button to pick<br>a color from anywhere</p>
+            </div>
+        </section>
+
+        <!-- Tab: Panel -->
+        <section class="tab-content" id="tab-panel">
+            <!-- Spectrum + Vertical Hue Slider -->
+            <div class="panel-canvases">
+                <div class="spectrum-wrapper">
+                    <canvas id="color-spectrum" width="248" height="180"></canvas>
+                    <div id="spectrum-cursor" class="spectrum-cursor"></div>
+                </div>
+                <div class="hue-bar-wrapper">
+                    <canvas id="hue-slider" width="18" height="180"></canvas>
+                    <div id="hue-cursor" class="hue-cursor-v"></div>
+                </div>
+            </div>
+
+            <!-- Preview + Inputs -->
+            <div class="panel-bottom">
+                <!-- New / Current preview swatches -->
+                <div class="panel-swatches">
+                    <div class="swatch-stack">
+                        <div id="panel-new-preview" class="swatch-box swatch-new"></div>
+                        <div id="panel-cur-preview" class="swatch-box swatch-cur"></div>
+                    </div>
+                    <div class="swatch-labels">
+                        <span>new</span>
+                        <span>current</span>
+                    </div>
+                </div>
+
+                <!-- Numeric fields -->
+                <div class="panel-fields">
+                    <div class="fields-col">
+                        <div class="field-row">
+                            <label>H</label>
+                            <input type="number" id="field-h" min="0" max="360" class="num-input">
+                            <span class="field-unit">°</span>
+                        </div>
+                        <div class="field-row">
+                            <label>S</label>
+                            <input type="number" id="field-s" min="0" max="100" class="num-input">
+                            <span class="field-unit">%</span>
+                        </div>
+                        <div class="field-row">
+                            <label>B</label>
+                            <input type="number" id="field-b" min="0" max="100" class="num-input">
+                            <span class="field-unit">%</span>
+                        </div>
+                    </div>
+                    <div class="fields-col">
+                        <div class="field-row">
+                            <label>R</label>
+                            <input type="number" id="field-r" min="0" max="255" class="num-input">
+                        </div>
+                        <div class="field-row">
+                            <label>G</label>
+                            <input type="number" id="field-g" min="0" max="255" class="num-input">
+                        </div>
+                        <div class="field-row">
+                            <label>B</label>
+                            <input type="number" id="field-bb" min="0" max="255" class="num-input">
+                        </div>
+                    </div>
+                    <div class="fields-hex-col">
+                        <div class="field-row hex-row">
+                            <label>#</label>
+                            <input type="text" id="panel-hex-input" maxlength="6" class="num-input hex-num-input" placeholder="6366F1">
+                        </div>
+                        <button id="panel-copy-btn" class="panel-copy-btn">Copy</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab: Gradient -->
+        <section class="tab-content" id="tab-gradient">
+            <div class="gradient-preview-wrap">
+                <div id="gradient-preview" class="gradient-preview"></div>
+            </div>
+
+            <div class="gradient-stops">
+                <div class="stop-item" data-index="0">
+                    <div class="stop-swatch" id="stop0-swatch" style="background:#6366f1"></div>
+                    <input type="text" id="stop0-input" value="#6366f1" class="color-input small" maxlength="7">
+                    <button class="stop-pick-btn" data-index="0" title="Pick color">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="m2 22 1-1h3l9-9"/><path d="M3 21v-3l9-9"/><path d="m15 6 3.4-3.4a2.1 2.1 0 1 1 3 3L18 9l.4.4a2.1 2.1 0 1 1-3 3l-3.8-3.8"/></svg>
+                    </button>
+                    <span class="stop-pos">0%</span>
+                </div>
+                <div class="stop-item" data-index="1">
+                    <div class="stop-swatch" id="stop1-swatch" style="background:#f43f5e"></div>
+                    <input type="text" id="stop1-input" value="#f43f5e" class="color-input small" maxlength="7">
+                    <button class="stop-pick-btn" data-index="1" title="Pick color">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="m2 22 1-1h3l9-9"/><path d="M3 21v-3l9-9"/><path d="m15 6 3.4-3.4a2.1 2.1 0 1 1 3 3L18 9l.4.4a2.1 2.1 0 1 1-3 3l-3.8-3.8"/></svg>
+                    </button>
+                    <span class="stop-pos">100%</span>
+                </div>
+            </div>
+
+            <div class="gradient-controls">
+                <div class="control-group">
+                    <label>Type</label>
+                    <select id="gradient-type" class="select-input">
+                        <option value="linear">Linear</option>
+                        <option value="radial">Radial</option>
+                    </select>
+                </div>
+                <div class="control-group" id="angle-group">
+                    <label>Angle</label>
+                    <div class="angle-input-wrap">
+                        <input type="range" id="gradient-angle" min="0" max="360" value="135" class="range-input">
+                        <span id="angle-display">135°</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="css-output-wrap">
+                <label class="output-label">CSS Output</label>
+                <div class="css-output-row">
+                    <code id="gradient-css" class="css-output">background: linear-gradient(135deg, #6366f1, #f43f5e);</code>
+                    <button id="copy-gradient-css" class="copy-btn glow">
+                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab: History -->
+        <section class="tab-content" id="tab-history">
+            <div id="history-list" class="history-list">
+                <div class="empty-state">
+                    <div class="empty-icon">🕐</div>
+                    <p>No colors saved yet.<br>Start picking colors!</p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        Copied!
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>
